@@ -29,6 +29,7 @@ const BACKEND_ORDER_URL_EMAIL = "https://hw-backend.onrender.com/api/orders/";
 
 function App() {
   // const [currentView, setCurrentView] = useState('main');
+  const [showAlert, setShowAlert] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showUserAccessPopup, setShowUserAccessPopup] = useState(false);
@@ -485,51 +486,6 @@ function App() {
     }
   };
 
-  // const handleMarkAsSold = async (tireId) => {
-  //   const username = localStorage.getItem("username"); // Fetch the user ID from local storage
-
-  //   try {
-  //     await axios.put(`${BACKEND_URL}/${tireId}/status`, {
-  //       status: "sold",
-  //       username: username,
-  //     });
-  //     fetchTires();
-  //     setAlert({
-  //       show: true,
-  //       severity: "success",
-  //       message: "Tire marked as sold successfully!",
-  //     });
-  //   } catch (error) {
-  //     console.error("Error marking tire as sold:", error);
-  //     setAlert({
-  //       show: true,
-  //       severity: "error",
-  //       message: "Error marking tire as sold: " + error.message,
-  //     });
-  //   }
-  // };
-  // const fetchTiresByRSize = async () => {
-  //   if (rSizeSearch.trim() === "") {
-  //     setTires(originalTires); // Reset to original tires if search is cleared
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await axios.get(`${BACKEND_URL}/search-by-rsize`, {
-  //       params: { rSize: rSizeSearch },
-  //     });
-  //     if (!originalTires.length) setOriginalTires(tires); // Store original tires if not already stored
-  //     setTires(response.data); // Update tires based on search
-  //   } catch (error) {
-  //     console.error("Error fetching tires by R size:", error);
-  //     setAlert({
-  //       show: true,
-  //       severity: "error",
-  //       message: "Error fetching tires: " + error.message,
-  //     });
-  //   }
-  // };
-
   // Function to open Classic Car Inventory Popup
   const openClassicCarInventoryPopup = () => {
     setShowClassicCarInventoryPopup(true);
@@ -546,16 +502,6 @@ function App() {
     }
     setIsOrderListPopupOpen(true); // Open the popup
   };
-
-  // const refreshOrders = async () => {
-  //   try {
-  //     const response = await axios.get(BACKEND_ORDER_URL);
-  //     setOrders(response.data);
-  //     // Update other relevant state if needed, like pendingOrdersCount
-  //   } catch (error) {
-  //     console.error("Error refreshing orders:", error);
-  //   }
-  // };
 
   const handleRefreshSpecificOrder = (newOrders) => {
     // Make sure newOrders is an array
@@ -587,16 +533,15 @@ function App() {
     setShowTireSalesAnalyticsDetailsPopup(false);
   };
 
-  // Handlers for Management popups
-  //    const handleClassicCarPopupOpen = () => setShowClassicCarPopup(true);
   const handleClassicCarPopupClose = () => setShowClassicCarPopup(false);
   const handleTireSalesPopupOpen = () => setShowTireSalesPopup(true);
   const handleTireSalesPopupClose = () => setShowTireSalesPopup(false);
+  const handleCloseAlert = () => setShowAlert(false);
 
   return (
     <Router>
       <div>
-        {alert.show && (
+        {/* {alert.show && (
           <div
             style={{
               display: "flex",
@@ -611,8 +556,31 @@ function App() {
               </Alert>
             </Stack>
           </div>
+        )} */}
+        {/* Alert Box */}
+        {showAlert && (
+          <div
+            style={{
+              backgroundColor: "red",
+              color: "white",
+              padding: "10px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "10px",
+            }}
+          >
+            <strong>
+              <span>This service will expire after 48 hours.</span>
+            </strong>
+            <button
+              onClick={handleCloseAlert}
+              style={{ color: "white", background: "none", border: "none" }}
+            >
+              X
+            </button>
+          </div>
         )}
-
         <Navbar
           onAddTire={() => setIsAddPopupOpen(true)}
           onSearchTire={() => setIsSearchPopupOpen(true)}
