@@ -571,7 +571,10 @@ function App() {
             }}
           >
             <strong>
-              <span>This service will expire after 48 hours.</span>
+              <span>
+                This service will expire after 48 hours. Notice released on Feb
+                27 2024.
+              </span>
             </strong>
             <button
               onClick={handleCloseAlert}
