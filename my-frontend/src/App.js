@@ -572,7 +572,7 @@ function App() {
           >
             <strong>
               <span>
-                This service will expire after 48 hours. Notice released on Feb
+                This service will expire after 24 hours. Notice released on Feb
                 27 2024.
               </span>
             </strong>
