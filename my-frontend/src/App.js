@@ -29,7 +29,7 @@ const BACKEND_ORDER_URL_EMAIL = "https://hw-backend.onrender.com/api/orders/";
 
 function App() {
   // const [currentView, setCurrentView] = useState('main');
-  const [showAlert, setShowAlert] = useState(true);
+  //const [showAlert, setShowAlert] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showUserAccessPopup, setShowUserAccessPopup] = useState(false);
@@ -536,12 +536,12 @@ function App() {
   const handleClassicCarPopupClose = () => setShowClassicCarPopup(false);
   const handleTireSalesPopupOpen = () => setShowTireSalesPopup(true);
   const handleTireSalesPopupClose = () => setShowTireSalesPopup(false);
-  const handleCloseAlert = () => setShowAlert(false);
+  //const handleCloseAlert = () => setShowAlert(false);
 
   return (
     <Router>
       <div>
-        {/* {alert.show && (
+        {alert.show && (
           <div
             style={{
               display: "flex",
@@ -556,9 +556,9 @@ function App() {
               </Alert>
             </Stack>
           </div>
-        )} */}
-        {/* Alert Box */}
-        {showAlert && (
+        )}
+        {/* Alert Box
+        {/* {showAlert && (
           <div
             style={{
               backgroundColor: "red",
@@ -583,7 +583,7 @@ function App() {
               X
             </button>
           </div>
-        )}
+        )} */}
         <Navbar
           onAddTire={() => setIsAddPopupOpen(true)}
           onSearchTire={() => setIsSearchPopupOpen(true)}
