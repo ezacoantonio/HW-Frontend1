@@ -18,7 +18,7 @@ import ListItemText from "@mui/material/ListItemText";
 import CarIcon from "@mui/icons-material/DirectionsCar";
 import AnalyticsIcon from "@mui/icons-material/Assessment";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { Dialog, List, ListItem } from "@mui/material";
+import { Dialog, List, ListItem, Typography } from "@mui/material";
 import axios from "axios";
 
 function Navbar({
@@ -231,13 +231,39 @@ function Navbar({
           /* logic to navigate to upper management page */
         }}
       />
-      <Dialog open={commonSoldTiresOpen} onClose={handleCommonSoldTiresClose}>
+      <Dialog
+        open={commonSoldTiresOpen}
+        onClose={handleCommonSoldTiresClose}
+        PaperProps={{ style: { padding: "20px" } }}
+      >
         <List>
           {mostCommonTires.map((tire, index) => (
             <ListItem key={index}>
               <ListItemText
-                primary={`Size: ${tire._id}`}
-                secondary={`Sold Count: ${tire.count}`}
+                primary={
+                  <>
+                    <Typography
+                      component="span"
+                      style={{ color: "orange", fontWeight: "bold" }}
+                    >
+                      Size:
+                    </Typography>
+                    <Typography
+                      component="span"
+                      style={{ color: "black", fontWeight: "bold" }}
+                    >
+                      {` ${tire._id}`}
+                    </Typography>
+                  </>
+                }
+                secondary={
+                  <Typography
+                    component="span"
+                    style={{ color: "green", fontWeight: "bold" }}
+                  >
+                    {`Sold Count: ${tire.count}`}
+                  </Typography>
+                }
               />
             </ListItem>
           ))}
