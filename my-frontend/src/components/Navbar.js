@@ -8,17 +8,18 @@ import Menu from "@mui/material/Menu";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import SearchIcon from "@mui/icons-material/Search";
 import LinkIcon from "@mui/icons-material/Link";
-//import VpnKeyIcon from "@mui/icons-material/VpnKey"; // Icon for admin access
 import AdminAccessPopup from "./AdminAccessPopup";
-import ManageAccountsTwoToneIcon from "@mui/icons-material/ManageAccountsTwoTone"; // Import for Management icon
+import ManageAccountsTwoToneIcon from "@mui/icons-material/ManageAccountsTwoTone";
 import UpperManagementLoginPopup from "./UpperManagementLoginPopup";
-import AccountCircle from "@mui/icons-material/AccountCircle"; // New import for login/logout icon
+import AccountCircle from "@mui/icons-material/AccountCircle";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import ListItemIcon from "@mui/material/ListItemIcon"; // New import for ListItemIcon
-import ListItemText from "@mui/material/ListItemText"; // New import for ListItemText
-import CarIcon from "@mui/icons-material/DirectionsCar"; // New import for Car Icon
-import AnalyticsIcon from "@mui/icons-material/Assessment"; // New import for Analytics Icon
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"; // For orders icon
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import CarIcon from "@mui/icons-material/DirectionsCar";
+import AnalyticsIcon from "@mui/icons-material/Assessment";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { Dialog, List, ListItem } from "@mui/material";
+import axios from "axios";
 
 function Navbar({
   onAddTire,
@@ -29,8 +30,8 @@ function Navbar({
   onLoginLogout,
   onClassicCarOpen,
   onTireSalesOpen,
-  onOrdersOpen, // New prop for handling order management
-  pendingOrdersCount, // New prop for the number of pending orders
+  onOrdersOpen,
+  pendingOrdersCount,
 }) {
   const [adminPopupOpen, setAdminPopupOpen] = useState(false);
   const [managementAnchorEl, setManagementAnchorEl] = useState(null);
@@ -43,7 +44,6 @@ function Navbar({
     setUpperManagementLoginOpen(true);
   };
   useEffect(() => {
-    // Fetch the user role from local storage
     const role = localStorage.getItem("role");
     setUserRole(role);
   }, []);
@@ -59,8 +59,8 @@ function Navbar({
   };
 
   const handleAdminAccessGranted = (isGranted) => {
-    onAdminAccess(isGranted); // Use onAdminAccess from props
-    setAdminPopupOpen(false); // Close the popup
+    onAdminAccess(isGranted);
+    setAdminPopupOpen(false);
   };
 
   const handleManagementMenuOpen = (event) => {
@@ -86,7 +86,7 @@ function Navbar({
   };
 
   const handleMenuOptionClick = (option) => {
-    setAnchorEl(null); // Close the menu
+    setAnchorEl(null);
     if (option === "addTire" && isAdmin) {
       onAddTire();
     } else if (option === "uploadImage") {
@@ -98,6 +98,26 @@ function Navbar({
     }
   };
 
+  // State and functions for most commonly sold tires dialog
+  const [commonSoldTiresOpen, setCommonSoldTiresOpen] = useState(false);
+  const [mostCommonTires, setMostCommonTires] = useState([]);
+
+  const handleCommonSoldTiresOpen = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:4000/api/tire-sales/most-common-sold"
+      );
+      setMostCommonTires(response.data);
+      setCommonSoldTiresOpen(true);
+    } catch (error) {
+      console.error("Error fetching most commonly sold tires:", error);
+    }
+  };
+
+  const handleCommonSoldTiresClose = () => {
+    setCommonSoldTiresOpen(false);
+  };
+
   return (
     <AppBar position="static" style={{ backgroundColor: "white" }}>
       <Toolbar
@@ -107,7 +127,6 @@ function Navbar({
           alignItems: "center",
         }}
       >
-        {/* Left section: Menu Icon and More */}
         <div style={{ display: "flex", alignItems: "center" }}>
           <IconButton
             style={{ color: "orange" }}
@@ -136,7 +155,6 @@ function Navbar({
               />
               Add Tire
             </MenuItem>
-
             <MenuItem onClick={() => handleMenuOptionClick("uploadImage")}>
               <LinkIcon style={{ marginRight: "10px", color: "orange" }} />
               Image Upload
@@ -154,12 +172,15 @@ function Navbar({
               <ListItemIcon>
                 <ManageAccountsTwoToneIcon style={{ color: "orange" }} />
               </ListItemIcon>
-
               <ListItemText primary="Management" />
             </MenuItem>
+            <MenuItem onClick={handleCommonSoldTiresOpen}>
+              <ListItemIcon>
+                <AnalyticsIcon style={{ color: "orange" }} />
+              </ListItemIcon>
+              <ListItemText primary="Most Commonly Sold Tires" />
+            </MenuItem>
           </Menu>
-          {/* Management Submenu */}
-          {/* Management Submenu */}
           <Menu
             anchorEl={managementAnchorEl}
             anchorOrigin={{ vertical: "top", horizontal: "right" }}
@@ -189,7 +210,6 @@ function Navbar({
           alt="Company Logo"
           style={{ maxHeight: "50px", minHeight: "20px" }}
         />
-
         <div style={{ display: "flex", alignItems: "center" }}>
           <IconButton style={{ color: "orange" }} onClick={onSearchTire}>
             <SearchIcon />
@@ -199,15 +219,11 @@ function Navbar({
           </IconButton>
         </div>
       </Toolbar>
-
-      {/* Admin Access Popup */}
       <AdminAccessPopup
         open={adminPopupOpen}
         onClose={handleAdminPopupClose}
         onAdminAccessGranted={handleAdminAccessGranted}
       />
-
-      {/* Upper Management Login Popup */}
       <UpperManagementLoginPopup
         open={upperManagementLoginOpen}
         onClose={() => setUpperManagementLoginOpen(false)}
@@ -215,6 +231,18 @@ function Navbar({
           /* logic to navigate to upper management page */
         }}
       />
+      <Dialog open={commonSoldTiresOpen} onClose={handleCommonSoldTiresClose}>
+        <List>
+          {mostCommonTires.map((tire, index) => (
+            <ListItem key={index}>
+              <ListItemText
+                primary={`Size: ${tire._id}`}
+                secondary={`Sold Count: ${tire.count}`}
+              />
+            </ListItem>
+          ))}
+        </List>
+      </Dialog>
     </AppBar>
   );
 }

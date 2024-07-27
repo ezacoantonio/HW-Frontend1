@@ -12,6 +12,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import UndoIcon from "@mui/icons-material/Undo";
 import OrderIcon from "@mui/icons-material/ShoppingCart"; // Add this
+
 function TireCard({
   tire,
   onView,
@@ -21,7 +22,6 @@ function TireCard({
   onMarkAsNotSold,
   isAdmin,
   onOrder,
-  daysSinceSold,
 }) {
   const isSold = tire.status === "sold";
   const cardStyle = isSold
@@ -35,6 +35,7 @@ function TireCard({
         maxWidth: 345,
         position: "relative",
       };
+
   const handleDelete = () => {
     if (
       window.confirm(
@@ -59,6 +60,16 @@ function TireCard({
     tire.imageUrls && tire.imageUrls.length > 0
       ? tire.imageUrls[0]
       : "/default-image.jpg";
+
+  // Function to calculate days listed
+  const calculateDaysListed = (listingDate) => {
+    const currentDate = new Date();
+    const listedDate = new Date(listingDate);
+    const differenceInTime = currentDate - listedDate;
+    return Math.floor(differenceInTime / (1000 * 3600 * 24));
+  };
+
+  const daysListed = calculateDaysListed(tire.listingDate);
 
   return (
     <Card sx={cardStyle}>
@@ -98,7 +109,8 @@ function TireCard({
             <br />
             Season: {tire.season} <br />
             Price: ${tire.price} <br />
-            Notes: {tire.notes}
+            Notes: {tire.notes} <br />
+            Days Listed: {daysListed} days
           </Typography>
         </CardContent>
       </CardActionArea>
