@@ -105,7 +105,7 @@ function Navbar({
   const handleCommonSoldTiresOpen = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/tire-sales/most-common-sold"
+        "https://hw-backend.onrender.com/api/tire-sales/most-common-sold"
       );
       setMostCommonTires(response.data);
       setCommonSoldTiresOpen(true);
